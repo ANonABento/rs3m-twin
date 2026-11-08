@@ -3,6 +3,8 @@
 import itertools
 from pathlib import Path
 
+import functools
+
 import numpy as np
 
 from .params import CubeParams
@@ -91,9 +93,20 @@ def piece_name(kind: str, c) -> str:
     return f"{kind}_{''.join('npz'[v + 1] for v in c)}"
 
 
-def faces_of(c) -> list[str]:
+def faces_of(c) -> tuple[str, ...]:
     """Faces (in FACES order) whose layer contains grid cell ``c``."""
-    return [f for f in FACES if np.dot(FACE_AXES[f], c) == 1]
+    return _faces_of(tuple(int(v) for v in c))
+
+
+@functools.lru_cache(maxsize=None)
+def _faces_of(c) -> tuple[str, ...]:
+    return tuple(f for f in FACES if np.dot(FACE_AXES[f], c) == 1)
+
+
+def never_touching(centres) -> list[tuple[tuple, tuple]]:
+    """Centre pairs that can never collide: centres only spin in place, and opposite ones sit
+    2 pitches apart, beyond the sum of their bounding radii (sqrt(3)/2 pitch each)."""
+    return [(a, b) for i, a in enumerate(centres) for b in centres[i + 1 :] if np.dot(a, b) == -1]
 
 
 def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAULT_PATH) -> str:
@@ -148,9 +161,12 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
         if stickerless
         else ""
     )
+    excludes = "\n".join(
+        f'    <exclude body1="{piece_name("centre", a)}" body2="{piece_name("centre", b)}"/>' for a, b in never_touching(centres)
+    )
     xml = f"""<mujoco model="rs3m">
   <compiler angle="radian" autolimits="true"/>
-  <option timestep="0.0005" integrator="implicitfast" gravity="0 0 0"/>  <!-- core is held; gravity only loads the welds -->
+  <option timestep="{p.timestep:.6g}" integrator="implicitfast" gravity="0 0 0"/>  <!-- core is held; gravity only loads the welds -->
   <asset>
     <mesh name="cubelet" vertex="{_chamfer_box_verts(h - p.gap, p.chamfer)}"/>
 {vis_assets}  </asset>
@@ -170,6 +186,9 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
     </body>
 {chr(10).join(bodies)}
   </worldbody>
+  <contact>
+{excludes}
+  </contact>
   <equality>
 {chr(10).join(welds)}
   </equality>

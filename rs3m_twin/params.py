@@ -32,7 +32,8 @@ class CubeParams:
     catch_damping: float = 3e-3  # piece-catch damper, N*m*s/rad
     catch_friction: float = 1e-3  # piece-catch dry friction, N*m
     align_tol_deg: float = 1.0  # a layer counts as aligned (may hand over pieces) within this, deg
-    gap: float = 3e-5  # per-side clearance between cubelet collision shapes, m
+    timestep: float = 0.001  # s; largest that keeps every test stable with implicitfast (1.5/2 ms miss the detent check)
+    gap: float = 1e-4  # per-side clearance between cubelet collision shapes, m (30 um jams at a 2 ms step)
     visual_style: str = "stickerless"  # "stickerless": coloured visual meshes; "debug": bare collision shapes
     vis_size: float = 0.0182  # visual block edge, m
     vis_round: float = 0.0022  # visual block edge rounding radius, m

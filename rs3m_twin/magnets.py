@@ -103,6 +103,8 @@ class DipoleDetent:
         self.deg = np.linspace(-45.0, 45.0, n)
         self.tau = dipole_torque(params, (0, 0, 1), np.radians(self.deg))
 
-    def __call__(self, theta: float) -> float:
+    def __call__(self, theta):
+        """Torque at ``theta`` (rad); a float, or an array for an array of angles."""
         x = (np.degrees(theta) + 45.0) % 90.0 - 45.0
-        return float(np.interp(x, self.deg, self.tau))
+        out = np.interp(x, self.deg, self.tau)
+        return out if np.ndim(theta) else float(out)

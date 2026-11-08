@@ -50,6 +50,7 @@ class CubeSim(FaceSim):
         super().__init__(params)
         self.torque = torque  # motor torque cap, N*m
         self.kp, self.kd = 0.03, 5e-4  # motor PD gains (N*m/rad, N*m*s/rad)
+        self.control_dt = 2e-3  # motor PD update period, s
         self._cell0 = dict(self.cells)  # solved-state cell: fixes each piece's sticker colours
         self._rot0 = {pc: self.data.xmat[i].reshape(3, 3).copy() for pc, i in self._piece_id.items()}
 
@@ -81,15 +82,16 @@ class CubeSim(FaceSim):
         i, dt, dof = FACES.index(face), self.model.opt.timestep, self.hinge_dof[face]
         target = self.home[face] - quarters * QUARTER  # clockwise = negative about the outward axis
         tol = np.radians(self.params.align_tol_deg)
+        k = max(1, round(self.control_dt / dt))  # physics steps per control update
         tq, t = np.zeros(6), 0.0
         while t < timeout:
             err = target - self.angle(face)
             tq[i] = np.clip(self.kp * err - self.kd * self.data.qvel[dof], -self.torque, self.torque)
-            self.step(tq, n=10)
-            t += 10 * dt
+            self.step(tq, n=k)
+            t += k * dt
             if abs(err) < tol / 4 and abs(self.data.qvel[dof]) < 0.05:
                 break
-        self.step(np.zeros(6), n=40)  # let the magnet seat it
+        self.step(np.zeros(6), n=max(1, round(0.02 / dt)))  # let the magnet seat it (20 ms)
         if abs(self.angle(face) - target) > tol:
             raise RuntimeError(f"{face} turn stalled at {np.degrees(self.angle(face)):.1f} deg (target {np.degrees(target):.0f})")
         self.home[face] = target
