@@ -19,7 +19,7 @@ def _run(sim, tq, t, track, stop=None):
 
 def _hold(sim, face, deg):
     """Torque that balances the magnet so ``face`` stays ``deg`` off-grid."""
-    return -magnet_torque(np.radians(deg), sim.params.magnet_k, sim.params.magnet_peak_deg)
+    return -sim.magnet(np.radians(deg))
 
 
 P = CubeParams()

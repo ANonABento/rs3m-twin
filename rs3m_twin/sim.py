@@ -4,6 +4,7 @@ import mujoco
 import numpy as np
 
 from .mjcf import FACE_AXES, FACES, build_mjcf, cubelet_positions, faces_of, piece_name
+from .magnets import DipoleDetent
 from .params import CubeParams
 
 QUARTER = np.pi / 2
@@ -40,7 +41,14 @@ class FaceSim:
         self.catch: dict[str, tuple[float, str | None, float]] = {}  # face -> (target, driver, drive torque)
         self._piece_id = {pc: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, pc) for pc in self.cells}
         self._layer_id = {f: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, f"layer_{f}") for f in FACES}
+        self._detent = DipoleDetent(self.params) if self.params.magnet_model == "dipole" else None
         mujoco.mj_forward(m, self.data)
+
+    def magnet(self, theta: float) -> float:
+        """Magnet torque (N*m) on a layer at ``theta``: the dipole table, or the sin4 curve."""
+        if self._detent is not None:
+            return self._detent(theta)
+        return float(magnet_torque(theta, self.params.magnet_k, self.params.magnet_peak_deg))
 
     def _eq(self, piece: str, face: str) -> int:
         return mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_EQUALITY, f"w_{piece}_{face}")
@@ -184,7 +192,7 @@ class FaceSim:
             self.data.ctrl[:] = self._membership(cmd)
             self.data.qfrc_applied[:] = 0
             for f in FACES:
-                self.data.qfrc_applied[self.hinge_dof[f]] = magnet_torque(self.angle(f), p.magnet_k, p.magnet_peak_deg)
+                self.data.qfrc_applied[self.hinge_dof[f]] = self.magnet(self.angle(f))
             for g, (target, _, _) in self.catch.items():  # piece catch: stiff spring-damper with friction
                 v = self.data.qvel[self.hinge_dof[g]]
                 tau = p.catch_k * (target - self.angle(g)) - p.catch_damping * v - p.catch_friction * np.tanh(v / 0.05)

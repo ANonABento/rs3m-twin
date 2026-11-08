@@ -18,6 +18,14 @@ class CubeParams:
     frictionloss: float = 2e-4  # hinge dry friction, N*m
     magnet_k: float = 3e-3  # peak detent torque, N*m
     magnet_peak_deg: float = 15.0
+    magnet_model: str = "dipole"  # "dipole": 48 point dipoles (magnets.py); "sin4": the curve above
+    magnet_scale: float = 1.0  # multiplies every dipole moment (true strength unknown, fitted later)
+    magnet_br: float = 1.43  # remanence, T (N52, assumed)
+    magnet_diameter: float = 3e-3  # m (assumed)
+    magnet_height: float = 1.5e-3  # m (assumed)
+    magnet_inset: float = 0.37  # magnet centre's in-plane distance from each turn axis, in pitches
+    magnet_gap: float = 6e-3  # centre-to-centre distance of a lined-up pair, m (incl. plastic walls)
+    magnet_cutoff: float = 8e-3  # ignore magnet pairs farther apart than this, m
     cut_fwd_deg: float = 50.0
     cut_rev_deg: float = 35.0
     catch_k: float = 0.5  # piece-catch spring, N*m/rad (beats magnet_k within a degree)
@@ -34,11 +42,11 @@ class CubeParams:
         return self.edge / 3.0
 
     def randomize(self, rng: np.random.Generator | int | None = None, scale: float = 0.2) -> "CubeParams":
-        """Return a copy with friction, damping, magnet strength, mass and the catch
+        """Return a copy with friction, damping, magnet strength (magnet_k, magnet_scale), mass and the catch
         spring/damper/friction each scaled by an
         independent factor drawn uniformly from [1 - scale, 1 + scale] (domain randomisation)."""
         rng = np.random.default_rng(rng)
-        f = rng.uniform(1.0 - scale, 1.0 + scale, size=8)
+        f = rng.uniform(1.0 - scale, 1.0 + scale, size=9)
         return replace(
             self,
             friction=self.friction * f[0],
@@ -49,4 +57,5 @@ class CubeParams:
             catch_k=self.catch_k * f[5],
             catch_damping=self.catch_damping * f[6],
             catch_friction=self.catch_friction * f[7],
+            magnet_scale=self.magnet_scale * f[8],
         )
