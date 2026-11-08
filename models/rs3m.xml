@@ -1,0 +1,338 @@
+<mujoco model="rs3m">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.0005" integrator="implicitfast" gravity="0 0 0"/>  <!-- core is held; gravity only loads the welds -->
+  <asset>
+    <mesh name="cubelet" vertex="-0.00922 -0.00802 -0.00802 -0.00922 -0.00802 0.00802 -0.00922 0.00802 -0.00802 -0.00922 0.00802 0.00802 -0.00802 -0.00922 -0.00802 -0.00802 -0.00922 0.00802 -0.00802 -0.00802 -0.00922 -0.00802 -0.00802 0.00922 -0.00802 0.00802 -0.00922 -0.00802 0.00802 0.00922 -0.00802 0.00922 -0.00802 -0.00802 0.00922 0.00802 0.00802 -0.00922 -0.00802 0.00802 -0.00922 0.00802 0.00802 -0.00802 -0.00922 0.00802 -0.00802 0.00922 0.00802 0.00802 -0.00922 0.00802 0.00802 0.00922 0.00802 0.00922 -0.00802 0.00802 0.00922 0.00802 0.00922 -0.00802 -0.00802 0.00922 -0.00802 0.00802 0.00922 0.00802 -0.00802 0.00922 0.00802 0.00802"/>
+  </asset>
+  <default>
+    <default class="piece">
+      <geom friction="0.15" margin="0" rgba="0.1 0.1 0.1 1"/>
+    </default>
+  </default>
+  <worldbody>
+    <body name="core">
+      <inertial pos="0 0 0" mass="0.0077" diaginertia="9.487e-08 9.487e-08 9.487e-08"/>
+      <geom name="core" type="sphere" size="0.00555" contype="0" conaffinity="0" rgba="0.5 0.5 0.5 1"/>
+      <body name="layer_U">
+        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-09 1e-09 1e-09"/>
+        <joint name="hinge_U" type="hinge" axis="0 0 1" damping="2e-05" armature="1e-07" frictionloss="0.0002"/>
+      </body>
+      <body name="layer_R">
+        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-09 1e-09 1e-09"/>
+        <joint name="hinge_R" type="hinge" axis="1 0 0" damping="2e-05" armature="1e-07" frictionloss="0.0002"/>
+      </body>
+      <body name="layer_F">
+        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-09 1e-09 1e-09"/>
+        <joint name="hinge_F" type="hinge" axis="0 -1 0" damping="2e-05" armature="1e-07" frictionloss="0.0002"/>
+      </body>
+      <body name="layer_D">
+        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-09 1e-09 1e-09"/>
+        <joint name="hinge_D" type="hinge" axis="0 0 -1" damping="2e-05" armature="1e-07" frictionloss="0.0002"/>
+      </body>
+      <body name="layer_L">
+        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-09 1e-09 1e-09"/>
+        <joint name="hinge_L" type="hinge" axis="-1 0 0" damping="2e-05" armature="1e-07" frictionloss="0.0002"/>
+      </body>
+      <body name="layer_B">
+        <inertial pos="0 0 0" mass="1e-6" diaginertia="1e-09 1e-09 1e-09"/>
+        <joint name="hinge_B" type="hinge" axis="0 1 0" damping="2e-05" armature="1e-07" frictionloss="0.0002"/>
+      </body>
+    </body>
+      <body name="centre_npp" pos="-0.0185 0 0">
+        <freejoint name="centre_npp"/>
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_npp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_pnp" pos="0 -0.0185 0">
+        <freejoint name="centre_pnp"/>
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_pnp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_ppn" pos="0 0 -0.0185">
+        <freejoint name="centre_ppn"/>
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_ppn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_ppz" pos="0 0 0.0185">
+        <freejoint name="centre_ppz"/>
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_ppz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_pzp" pos="0 0.0185 0">
+        <freejoint name="centre_pzp"/>
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_pzp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_zpp" pos="0.0185 0 0">
+        <freejoint name="centre_zpp"/>
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_zpp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nnn" pos="-0.0185 -0.0185 -0.0185">
+        <freejoint name="cubelet_nnn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nnn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nnp" pos="-0.0185 -0.0185 0">
+        <freejoint name="cubelet_nnp"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nnp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nnz" pos="-0.0185 -0.0185 0.0185">
+        <freejoint name="cubelet_nnz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nnz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_npn" pos="-0.0185 0 -0.0185">
+        <freejoint name="cubelet_npn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_npn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_npz" pos="-0.0185 0 0.0185">
+        <freejoint name="cubelet_npz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_npz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nzn" pos="-0.0185 0.0185 -0.0185">
+        <freejoint name="cubelet_nzn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nzn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nzp" pos="-0.0185 0.0185 0">
+        <freejoint name="cubelet_nzp"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nzp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nzz" pos="-0.0185 0.0185 0.0185">
+        <freejoint name="cubelet_nzz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nzz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pnn" pos="0 -0.0185 -0.0185">
+        <freejoint name="cubelet_pnn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pnn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pnz" pos="0 -0.0185 0.0185">
+        <freejoint name="cubelet_pnz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pnz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pzn" pos="0 0.0185 -0.0185">
+        <freejoint name="cubelet_pzn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pzn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pzz" pos="0 0.0185 0.0185">
+        <freejoint name="cubelet_pzz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pzz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_znn" pos="0.0185 -0.0185 -0.0185">
+        <freejoint name="cubelet_znn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_znn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_znp" pos="0.0185 -0.0185 0">
+        <freejoint name="cubelet_znp"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_znp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_znz" pos="0.0185 -0.0185 0.0185">
+        <freejoint name="cubelet_znz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_znz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zpn" pos="0.0185 0 -0.0185">
+        <freejoint name="cubelet_zpn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zpn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zpz" pos="0.0185 0 0.0185">
+        <freejoint name="cubelet_zpz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zpz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zzn" pos="0.0185 0.0185 -0.0185">
+        <freejoint name="cubelet_zzn"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zzn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zzp" pos="0.0185 0.0185 0">
+        <freejoint name="cubelet_zzp"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zzp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zzz" pos="0.0185 0.0185 0.0185">
+        <freejoint name="cubelet_zzz"/>
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zzz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+  </worldbody>
+  <equality>
+    <weld name="w_centre_npp_U" body1="centre_npp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_R" body1="centre_npp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_F" body1="centre_npp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_D" body1="centre_npp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_L" body1="centre_npp" body2="layer_L" active="true" solref="0.002 1"/>
+    <weld name="w_centre_npp_B" body1="centre_npp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_U" body1="centre_pnp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_R" body1="centre_pnp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_F" body1="centre_pnp" body2="layer_F" active="true" solref="0.002 1"/>
+    <weld name="w_centre_pnp_D" body1="centre_pnp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_L" body1="centre_pnp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_B" body1="centre_pnp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_U" body1="centre_ppn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_R" body1="centre_ppn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_F" body1="centre_ppn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_D" body1="centre_ppn" body2="layer_D" active="true" solref="0.002 1"/>
+    <weld name="w_centre_ppn_L" body1="centre_ppn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_B" body1="centre_ppn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_U" body1="centre_ppz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_centre_ppz_R" body1="centre_ppz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_F" body1="centre_ppz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_D" body1="centre_ppz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_L" body1="centre_ppz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_B" body1="centre_ppz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_U" body1="centre_pzp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_R" body1="centre_pzp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_F" body1="centre_pzp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_D" body1="centre_pzp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_L" body1="centre_pzp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_B" body1="centre_pzp" body2="layer_B" active="true" solref="0.002 1"/>
+    <weld name="w_centre_zpp_U" body1="centre_zpp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_R" body1="centre_zpp" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_centre_zpp_F" body1="centre_zpp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_D" body1="centre_zpp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_L" body1="centre_zpp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_B" body1="centre_zpp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_U" body1="cubelet_nnn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_R" body1="cubelet_nnn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_F" body1="cubelet_nnn" body2="layer_F" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_D" body1="cubelet_nnn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_L" body1="cubelet_nnn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_B" body1="cubelet_nnn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_U" body1="cubelet_nnp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_R" body1="cubelet_nnp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_F" body1="cubelet_nnp" body2="layer_F" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_D" body1="cubelet_nnp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_L" body1="cubelet_nnp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_B" body1="cubelet_nnp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_U" body1="cubelet_nnz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_R" body1="cubelet_nnz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_F" body1="cubelet_nnz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_D" body1="cubelet_nnz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_L" body1="cubelet_nnz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_B" body1="cubelet_nnz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_U" body1="cubelet_npn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_R" body1="cubelet_npn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_F" body1="cubelet_npn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_D" body1="cubelet_npn" body2="layer_D" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_L" body1="cubelet_npn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_B" body1="cubelet_npn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_U" body1="cubelet_npz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_R" body1="cubelet_npz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_F" body1="cubelet_npz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_D" body1="cubelet_npz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_L" body1="cubelet_npz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_B" body1="cubelet_npz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_U" body1="cubelet_nzn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_R" body1="cubelet_nzn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_F" body1="cubelet_nzn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_D" body1="cubelet_nzn" body2="layer_D" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_L" body1="cubelet_nzn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_B" body1="cubelet_nzn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_U" body1="cubelet_nzp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_R" body1="cubelet_nzp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_F" body1="cubelet_nzp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_D" body1="cubelet_nzp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_L" body1="cubelet_nzp" body2="layer_L" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_B" body1="cubelet_nzp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_U" body1="cubelet_nzz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_R" body1="cubelet_nzz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_F" body1="cubelet_nzz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_D" body1="cubelet_nzz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_L" body1="cubelet_nzz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_B" body1="cubelet_nzz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_U" body1="cubelet_pnn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_R" body1="cubelet_pnn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_F" body1="cubelet_pnn" body2="layer_F" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_D" body1="cubelet_pnn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_L" body1="cubelet_pnn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_B" body1="cubelet_pnn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_U" body1="cubelet_pnz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_R" body1="cubelet_pnz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_F" body1="cubelet_pnz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_D" body1="cubelet_pnz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_L" body1="cubelet_pnz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_B" body1="cubelet_pnz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_U" body1="cubelet_pzn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_R" body1="cubelet_pzn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_F" body1="cubelet_pzn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_D" body1="cubelet_pzn" body2="layer_D" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_L" body1="cubelet_pzn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_B" body1="cubelet_pzn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_U" body1="cubelet_pzz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_R" body1="cubelet_pzz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_F" body1="cubelet_pzz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_D" body1="cubelet_pzz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_L" body1="cubelet_pzz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_B" body1="cubelet_pzz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_U" body1="cubelet_znn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_R" body1="cubelet_znn" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_F" body1="cubelet_znn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_D" body1="cubelet_znn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_L" body1="cubelet_znn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_B" body1="cubelet_znn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_U" body1="cubelet_znp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_R" body1="cubelet_znp" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_F" body1="cubelet_znp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_D" body1="cubelet_znp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_L" body1="cubelet_znp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_B" body1="cubelet_znp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_U" body1="cubelet_znz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_R" body1="cubelet_znz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_F" body1="cubelet_znz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_D" body1="cubelet_znz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_L" body1="cubelet_znz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_B" body1="cubelet_znz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_U" body1="cubelet_zpn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_R" body1="cubelet_zpn" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_F" body1="cubelet_zpn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_D" body1="cubelet_zpn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_L" body1="cubelet_zpn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_B" body1="cubelet_zpn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_U" body1="cubelet_zpz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_R" body1="cubelet_zpz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_F" body1="cubelet_zpz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_D" body1="cubelet_zpz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_L" body1="cubelet_zpz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_B" body1="cubelet_zpz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_U" body1="cubelet_zzn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_R" body1="cubelet_zzn" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_F" body1="cubelet_zzn" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_D" body1="cubelet_zzn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_L" body1="cubelet_zzn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_B" body1="cubelet_zzn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_U" body1="cubelet_zzp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_R" body1="cubelet_zzp" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_F" body1="cubelet_zzp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_D" body1="cubelet_zzp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_L" body1="cubelet_zzp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_B" body1="cubelet_zzp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_U" body1="cubelet_zzz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_R" body1="cubelet_zzz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_F" body1="cubelet_zzz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_D" body1="cubelet_zzz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_L" body1="cubelet_zzz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_B" body1="cubelet_zzz" body2="layer_B" active="false" solref="0.002 1"/>
+  </equality>
+  <actuator>
+    <motor name="motor_U" joint="hinge_U" ctrlrange="-0.05 0.05"/>
+    <motor name="motor_R" joint="hinge_R" ctrlrange="-0.05 0.05"/>
+    <motor name="motor_F" joint="hinge_F" ctrlrange="-0.05 0.05"/>
+    <motor name="motor_D" joint="hinge_D" ctrlrange="-0.05 0.05"/>
+    <motor name="motor_L" joint="hinge_L" ctrlrange="-0.05 0.05"/>
+    <motor name="motor_B" joint="hinge_B" ctrlrange="-0.05 0.05"/>
+  </actuator>
+</mujoco>

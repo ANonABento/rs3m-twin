@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rs3m-twin"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["mujoco>=3.1", "numpy", "scipy"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[tool.setuptools]
+packages = ["rs3m_twin"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+rs3m_twin = ["data/*.csv"]
