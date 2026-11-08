@@ -28,6 +28,19 @@ def cubelet_positions():
     return centres, others
 
 
+FACES = "URFDLB"  # Kociemba order
+FACE_AXES = {"U": (0, 0, 1), "R": (1, 0, 0), "F": (0, -1, 0), "D": (0, 0, -1), "L": (-1, 0, 0), "B": (0, 1, 0)}
+
+
+def piece_name(kind: str, c) -> str:
+    return f"{kind}_{''.join('npz'[v + 1] for v in c)}"
+
+
+def faces_of(c) -> list[str]:
+    """Faces (in FACES order) whose layer contains grid cell ``c``."""
+    return [f for f in FACES if np.dot(FACE_AXES[f], c) == 1]
+
+
 def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAULT_PATH) -> str:
     """Return the MJCF XML for ``params`` and write it to ``path`` (skip if None)."""
     p = params or CubeParams()
@@ -39,36 +52,59 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
     i_box = lambda m: m * (2 * h) ** 2 / 6  # noqa: E731
     r_core = 0.6 * h
 
-    bodies = []
+    bodies, welds = [], []
     for kind, cells, m in (("centre", centres, m_centre), ("cubelet", others, m_other)):
         for c in cells:
-            name = f"{kind}_{''.join('npz'[v + 1] for v in c)}"  # n=-1, p=0... readable id
+            name = piece_name(kind, c)  # n=-1, z=0, p=+1
             pos = " ".join(f"{v * pitch:.6g}" for v in c)
             bodies.append(
                 f'      <body name="{name}" pos="{pos}">\n'
+                f'        <freejoint name="{name}"/>\n'
                 f'        <inertial pos="0 0 0" mass="{m:.6g}" diaginertia="{i_box(m):.4g} {i_box(m):.4g} {i_box(m):.4g}"/>\n'
                 f'        <geom name="{name}" type="mesh" mesh="cubelet" class="piece"/>\n'
                 f"      </body>"
             )
+            for f in faces_of(c):  # one soft weld per candidate layer; one active at a time
+                active = "true" if f == faces_of(c)[0] else "false"
+                welds.append(
+                    f'    <weld name="w_{name}_{f}" body1="{name}" body2="layer_{f}" active="{active}" solref="0.002 1"/>'
+                )
     i_core = 0.4 * m_core * r_core**2
+    i_layer = 1e-9
+    layers = "\n".join(
+        f'      <body name="layer_{f}">\n'
+        f'        <inertial pos="0 0 0" mass="1e-6" diaginertia="{i_layer} {i_layer} {i_layer}"/>\n'
+        f'        <joint name="hinge_{f}" type="hinge" axis="{" ".join(map(str, a))}" damping="{p.damping:.6g}"'
+        f' armature="{p.armature:.6g}" frictionloss="{p.frictionloss:.6g}"/>\n'
+        f"      </body>"
+        for f, a in FACE_AXES.items()
+    )
+    motors = "\n".join(f'    <motor name="motor_{f}" joint="hinge_{f}" ctrlrange="-0.05 0.05"/>' for f in FACES)
     xml = f"""<mujoco model="rs3m">
   <compiler angle="radian" autolimits="true"/>
-  <option timestep="0.0005" integrator="implicitfast"/>
+  <option timestep="0.0005" integrator="implicitfast" gravity="0 0 0"/>  <!-- core is held; gravity only loads the welds -->
   <asset>
-    <mesh name="cubelet" vertex="{_chamfer_box_verts(h, p.chamfer)}"/>
+    <mesh name="cubelet" vertex="{_chamfer_box_verts(h - p.gap, p.chamfer)}"/>
   </asset>
   <default>
     <default class="piece">
-      <geom friction="{p.friction:.6g}" margin="0.0002" rgba="0.1 0.1 0.1 1"/>
+      <geom friction="{p.friction:.6g}" margin="0" rgba="0.1 0.1 0.1 1"/>
     </default>
   </default>
   <worldbody>
     <body name="core">
       <inertial pos="0 0 0" mass="{m_core:.6g}" diaginertia="{i_core:.4g} {i_core:.4g} {i_core:.4g}"/>
       <geom name="core" type="sphere" size="{r_core:.6g}" contype="0" conaffinity="0" rgba="0.5 0.5 0.5 1"/>
-{chr(10).join(bodies)}
+{layers}
     </body>
+{chr(10).join(bodies)}
   </worldbody>
+  <equality>
+{chr(10).join(welds)}
+  </equality>
+  <actuator>
+{motors}
+  </actuator>
 </mujoco>
 """
     if path is not None:

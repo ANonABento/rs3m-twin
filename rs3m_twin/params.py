@@ -18,6 +18,7 @@ class CubeParams:
     magnet_peak_deg: float = 15.0
     cut_fwd_deg: float = 45.0
     cut_rev_deg: float = 20.0
+    gap: float = 3e-5  # per-side clearance between cubelet collision shapes, m
 
     @property
     def pitch(self) -> float:

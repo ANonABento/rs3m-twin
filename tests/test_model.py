@@ -18,7 +18,7 @@ def built(request, tmp_path):
 
 def test_structure_and_no_warnings(built):
     _, model, data = built
-    assert model.nbody == 1 + 1 + 6 + 20
+    assert model.nbody == 1 + 1 + 6 + 6 + 20  # world, core, layers, centres, cubelets
     for _ in range(200):
         mujoco.mj_step(model, data)
     assert all(w.number == 0 for w in data.warning)
