@@ -1,6 +1,8 @@
 """Physical constants of the cube, all in one place (SI units unless noted)."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+
+import numpy as np
 
 
 @dataclass
@@ -24,3 +26,17 @@ class CubeParams:
     @property
     def pitch(self) -> float:
         return self.edge / 3.0
+
+    def randomize(self, rng: np.random.Generator | int | None = None, scale: float = 0.2) -> "CubeParams":
+        """Return a copy with friction, damping, magnet strength and mass each scaled by an
+        independent factor drawn uniformly from [1 - scale, 1 + scale] (domain randomisation)."""
+        rng = np.random.default_rng(rng)
+        f = rng.uniform(1.0 - scale, 1.0 + scale, size=5)
+        return replace(
+            self,
+            friction=self.friction * f[0],
+            damping=self.damping * f[1],
+            frictionloss=self.frictionloss * f[2],
+            magnet_k=self.magnet_k * f[3],
+            mass=self.mass * f[4],
+        )
