@@ -18,6 +18,7 @@ class CubeParams:
     magnet_peak_deg: float = 15.0
     cut_fwd_deg: float = 45.0
     cut_rev_deg: float = 20.0
+    align_tol_deg: float = 1.0  # a layer counts as aligned (may hand over pieces) within this, deg
     gap: float = 3e-5  # per-side clearance between cubelet collision shapes, m
 
     @property
