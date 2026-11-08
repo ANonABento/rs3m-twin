@@ -1,0 +1,122 @@
+<mujoco model="rs3m">
+  <compiler angle="radian" autolimits="true"/>
+  <option timestep="0.0005" integrator="implicitfast"/>
+  <asset>
+    <mesh name="cubelet" vertex="-0.00925 -0.00805 -0.00805 -0.00925 -0.00805 0.00805 -0.00925 0.00805 -0.00805 -0.00925 0.00805 0.00805 -0.00805 -0.00925 -0.00805 -0.00805 -0.00925 0.00805 -0.00805 -0.00805 -0.00925 -0.00805 -0.00805 0.00925 -0.00805 0.00805 -0.00925 -0.00805 0.00805 0.00925 -0.00805 0.00925 -0.00805 -0.00805 0.00925 0.00805 0.00805 -0.00925 -0.00805 0.00805 -0.00925 0.00805 0.00805 -0.00805 -0.00925 0.00805 -0.00805 0.00925 0.00805 0.00805 -0.00925 0.00805 0.00805 0.00925 0.00805 0.00925 -0.00805 0.00805 0.00925 0.00805 0.00925 -0.00805 -0.00805 0.00925 -0.00805 0.00805 0.00925 0.00805 -0.00805 0.00925 0.00805 0.00805"/>
+  </asset>
+  <default>
+    <default class="piece">
+      <geom friction="0.15" margin="0.0002" rgba="0.1 0.1 0.1 1"/>
+    </default>
+  </default>
+  <worldbody>
+    <body name="core">
+      <inertial pos="0 0 0" mass="0.0077" diaginertia="9.487e-08 9.487e-08 9.487e-08"/>
+      <geom name="core" type="sphere" size="0.00555" contype="0" conaffinity="0" rgba="0.5 0.5 0.5 1"/>
+      <body name="centre_npp" pos="-0.0185 0 0">
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_npp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_pnp" pos="0 -0.0185 0">
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_pnp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_ppn" pos="0 0 -0.0185">
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_ppn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_ppz" pos="0 0 0.0185">
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_ppz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_pzp" pos="0 0.0185 0">
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_pzp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="centre_zpp" pos="0.0185 0 0">
+        <inertial pos="0 0 0" mass="0.00256667" diaginertia="1.464e-07 1.464e-07 1.464e-07"/>
+        <geom name="centre_zpp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nnn" pos="-0.0185 -0.0185 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nnn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nnp" pos="-0.0185 -0.0185 0">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nnp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nnz" pos="-0.0185 -0.0185 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nnz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_npn" pos="-0.0185 0 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_npn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_npz" pos="-0.0185 0 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_npz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nzn" pos="-0.0185 0.0185 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nzn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nzp" pos="-0.0185 0.0185 0">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nzp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_nzz" pos="-0.0185 0.0185 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_nzz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pnn" pos="0 -0.0185 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pnn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pnz" pos="0 -0.0185 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pnz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pzn" pos="0 0.0185 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pzn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_pzz" pos="0 0.0185 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_pzz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_znn" pos="0.0185 -0.0185 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_znn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_znp" pos="0.0185 -0.0185 0">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_znp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_znz" pos="0.0185 -0.0185 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_znz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zpn" pos="0.0185 0 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zpn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zpz" pos="0.0185 0 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zpz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zzn" pos="0.0185 0.0185 -0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zzn" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zzp" pos="0.0185 0.0185 0">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zzp" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+      <body name="cubelet_zzz" pos="0.0185 0.0185 0.0185">
+        <inertial pos="0 0 0" mass="0.002695" diaginertia="1.537e-07 1.537e-07 1.537e-07"/>
+        <geom name="cubelet_zzz" type="mesh" mesh="cubelet" class="piece"/>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>
