@@ -10,6 +10,7 @@ dependencies = ["mujoco>=3.1", "numpy", "scipy"]
 
 [project.optional-dependencies]
 test = ["pytest"]
+video = ["opencv-python-headless"]
 
 [tool.setuptools]
 packages = ["rs3m_twin"]

@@ -91,6 +91,24 @@ def fit(data, init: CubeParams | None = None) -> CubeParams:
     return make(res.x)
 
 
+def fit_log(resid, init: CubeParams, fields, extra=(), span: float = 3.0):
+    """Least-squares fit of the positive ``fields`` of ``init`` (in log space, within ``exp(+-span)`` of
+    their start) plus free ``extra`` numbers, to ``resid(params, *extra) -> array``.
+
+    Returns ``(params, extra, cost)``.
+    """
+    fields, n = list(fields), len(fields)
+    z0 = np.r_[np.log([getattr(init, f) for f in fields]), np.asarray(extra, float)]
+    lo = np.r_[z0[:n] - span, np.full(len(z0) - n, -np.inf)]
+    hi = np.r_[z0[:n] + span, np.full(len(z0) - n, np.inf)]
+
+    def make(z):
+        return replace(init, **{f: float(np.exp(v)) for f, v in zip(fields, z[:n])})
+
+    res = least_squares(lambda z: resid(make(z), *z[n:]), z0, bounds=(lo, hi), x_scale="jac", diff_step=1e-3)
+    return make(res.x), tuple(float(v) for v in res.x[n:]), float(res.cost)
+
+
 def synthetic(params: CubeParams, noise: float = 0.0, rng=None) -> dict[str, tuple[np.ndarray, np.ndarray]]:
     """Measurements a cube with ``params`` would give, with relative Gaussian noise."""
     rng = np.random.default_rng(rng)
