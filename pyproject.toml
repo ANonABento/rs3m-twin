@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rs3m-twin"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = ["numpy", "pyyaml", "trimesh", "scipy", "mujoco"]
+
+[project.optional-dependencies]
+decomp = ["coacd"]
+test = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["rs3m_twin*"]
+
+[tool.setuptools.package-data]
+rs3m_twin = ["params.yaml"]

@@ -1,0 +1,21 @@
+# All physical values. Lengths in mm, mass in g, angles in degrees.
+geometry:
+  edge: 56.0            # cube edge
+  gap: 0.25             # layer gap
+  edge_radius: 2.0      # cubie edge rounding
+  core_radius: 6.0      # core sphere radius
+mass:
+  total: 77.0           # magnetic version (86.0 for Ball-Core)
+  core_fraction: 0.05   # share of total mass in the core
+friction:
+  sliding: 0.3
+  torsional: 0.005
+  rolling: 0.0001
+damping:
+  layer: 0.0005         # N*m*s/rad
+magnets:
+  snap_torque: 4.0      # mN*m peak
+  capture_angle: 15.0   # deg
+corner_cut:
+  forward: 45.0         # deg
+  reverse: 15.0         # deg
