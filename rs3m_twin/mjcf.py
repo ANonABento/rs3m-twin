@@ -64,7 +64,7 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
                 f'        <geom name="{name}" type="mesh" mesh="cubelet" class="piece"/>\n'
                 f"      </body>"
             )
-            for f in faces_of(c):  # one soft weld per candidate layer; one active at a time
+            for f in FACES:  # one soft weld per layer (pieces move between layers); one active at a time
                 active = "true" if f == faces_of(c)[0] else "false"
                 welds.append(
                     f'    <weld name="w_{name}_{f}" body1="{name}" body2="layer_{f}" active="{active}" solref="0.002 1"/>'

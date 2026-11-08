@@ -55,7 +55,7 @@ class FaceSim:
         mujoco.mju_mulQuat(self.model.eq_data[e, 6:10], q1, d.xquat[b2])
 
     def _give(self, piece: str, face: str) -> None:
-        for f in faces_of(self.cells[piece]):
+        for f in FACES:
             self.data.eq_active[self._eq(piece, f)] = f == face
         self._rebase(piece, face)
         self.owner[piece] = face

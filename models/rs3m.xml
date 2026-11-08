@@ -170,59 +170,161 @@
       </body>
   </worldbody>
   <equality>
+    <weld name="w_centre_npp_U" body1="centre_npp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_R" body1="centre_npp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_F" body1="centre_npp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_npp_D" body1="centre_npp" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_centre_npp_L" body1="centre_npp" body2="layer_L" active="true" solref="0.002 1"/>
+    <weld name="w_centre_npp_B" body1="centre_npp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_U" body1="centre_pnp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_R" body1="centre_pnp" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_centre_pnp_F" body1="centre_pnp" body2="layer_F" active="true" solref="0.002 1"/>
+    <weld name="w_centre_pnp_D" body1="centre_pnp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_L" body1="centre_pnp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pnp_B" body1="centre_pnp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_U" body1="centre_ppn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_R" body1="centre_ppn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_F" body1="centre_ppn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_centre_ppn_D" body1="centre_ppn" body2="layer_D" active="true" solref="0.002 1"/>
+    <weld name="w_centre_ppn_L" body1="centre_ppn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppn_B" body1="centre_ppn" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_centre_ppz_U" body1="centre_ppz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_centre_ppz_R" body1="centre_ppz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_F" body1="centre_ppz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_D" body1="centre_ppz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_L" body1="centre_ppz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_ppz_B" body1="centre_ppz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_U" body1="centre_pzp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_R" body1="centre_pzp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_F" body1="centre_pzp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_D" body1="centre_pzp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_pzp_L" body1="centre_pzp" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_centre_pzp_B" body1="centre_pzp" body2="layer_B" active="true" solref="0.002 1"/>
+    <weld name="w_centre_zpp_U" body1="centre_zpp" body2="layer_U" active="false" solref="0.002 1"/>
     <weld name="w_centre_zpp_R" body1="centre_zpp" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_centre_zpp_F" body1="centre_zpp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_D" body1="centre_zpp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_L" body1="centre_zpp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_centre_zpp_B" body1="centre_zpp" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_U" body1="cubelet_nnn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_R" body1="cubelet_nnn" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnn_F" body1="cubelet_nnn" body2="layer_F" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_nnn_D" body1="cubelet_nnn" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnn_L" body1="cubelet_nnn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnn_B" body1="cubelet_nnn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_U" body1="cubelet_nnp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_R" body1="cubelet_nnp" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnp_F" body1="cubelet_nnp" body2="layer_F" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_D" body1="cubelet_nnp" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnp_L" body1="cubelet_nnp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnp_B" body1="cubelet_nnp" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnz_U" body1="cubelet_nnz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_R" body1="cubelet_nnz" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnz_F" body1="cubelet_nnz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_D" body1="cubelet_nnz" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nnz_L" body1="cubelet_nnz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nnz_B" body1="cubelet_nnz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_U" body1="cubelet_npn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_R" body1="cubelet_npn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_F" body1="cubelet_npn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_npn_D" body1="cubelet_npn" body2="layer_D" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_npn_L" body1="cubelet_npn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npn_B" body1="cubelet_npn" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_npz_U" body1="cubelet_npz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_R" body1="cubelet_npz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_F" body1="cubelet_npz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_D" body1="cubelet_npz" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_npz_L" body1="cubelet_npz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_npz_B" body1="cubelet_npz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_U" body1="cubelet_nzn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_R" body1="cubelet_nzn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzn_F" body1="cubelet_nzn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nzn_D" body1="cubelet_nzn" body2="layer_D" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_nzn_L" body1="cubelet_nzn" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nzn_B" body1="cubelet_nzn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_U" body1="cubelet_nzp" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_R" body1="cubelet_nzp" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_F" body1="cubelet_nzp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzp_D" body1="cubelet_nzp" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nzp_L" body1="cubelet_nzp" body2="layer_L" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_nzp_B" body1="cubelet_nzp" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nzz_U" body1="cubelet_nzz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_R" body1="cubelet_nzz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_F" body1="cubelet_nzz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_nzz_D" body1="cubelet_nzz" body2="layer_D" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nzz_L" body1="cubelet_nzz" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_nzz_B" body1="cubelet_nzz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_U" body1="cubelet_pnn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_R" body1="cubelet_pnn" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pnn_F" body1="cubelet_pnn" body2="layer_F" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_pnn_D" body1="cubelet_pnn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_L" body1="cubelet_pnn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnn_B" body1="cubelet_pnn" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pnz_U" body1="cubelet_pnz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_R" body1="cubelet_pnz" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pnz_F" body1="cubelet_pnz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_D" body1="cubelet_pnz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_L" body1="cubelet_pnz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pnz_B" body1="cubelet_pnz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_U" body1="cubelet_pzn" body2="layer_U" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_R" body1="cubelet_pzn" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_F" body1="cubelet_pzn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pzn_D" body1="cubelet_pzn" body2="layer_D" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pzn_L" body1="cubelet_pzn" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pzn_B" body1="cubelet_pzn" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pzz_U" body1="cubelet_pzz" body2="layer_U" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_R" body1="cubelet_pzz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_F" body1="cubelet_pzz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_D" body1="cubelet_pzz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_pzz_L" body1="cubelet_pzz" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_pzz_B" body1="cubelet_pzz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_U" body1="cubelet_znn" body2="layer_U" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_znn_R" body1="cubelet_znn" body2="layer_R" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_znn_F" body1="cubelet_znn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_znn_D" body1="cubelet_znn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_L" body1="cubelet_znn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znn_B" body1="cubelet_znn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_U" body1="cubelet_znp" body2="layer_U" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_znp_R" body1="cubelet_znp" body2="layer_R" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_znp_F" body1="cubelet_znp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_D" body1="cubelet_znp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_L" body1="cubelet_znp" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znp_B" body1="cubelet_znp" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_znz_U" body1="cubelet_znz" body2="layer_U" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_znz_R" body1="cubelet_znz" body2="layer_R" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_znz_F" body1="cubelet_znz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_D" body1="cubelet_znz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_L" body1="cubelet_znz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_znz_B" body1="cubelet_znz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_U" body1="cubelet_zpn" body2="layer_U" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zpn_R" body1="cubelet_zpn" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_F" body1="cubelet_zpn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zpn_D" body1="cubelet_zpn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_L" body1="cubelet_zpn" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpn_B" body1="cubelet_zpn" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zpz_U" body1="cubelet_zpz" body2="layer_U" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_zpz_R" body1="cubelet_zpz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_F" body1="cubelet_zpz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_D" body1="cubelet_zpz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_L" body1="cubelet_zpz" body2="layer_L" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zpz_B" body1="cubelet_zpz" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_U" body1="cubelet_zzn" body2="layer_U" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzn_R" body1="cubelet_zzn" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_F" body1="cubelet_zzn" body2="layer_F" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzn_D" body1="cubelet_zzn" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzn_L" body1="cubelet_zzn" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzn_B" body1="cubelet_zzn" body2="layer_B" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_U" body1="cubelet_zzp" body2="layer_U" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzp_R" body1="cubelet_zzp" body2="layer_R" active="true" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_F" body1="cubelet_zzp" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_D" body1="cubelet_zzp" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzp_L" body1="cubelet_zzp" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzp_B" body1="cubelet_zzp" body2="layer_B" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzz_U" body1="cubelet_zzz" body2="layer_U" active="true" solref="0.002 1"/>
     <weld name="w_cubelet_zzz_R" body1="cubelet_zzz" body2="layer_R" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_F" body1="cubelet_zzz" body2="layer_F" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_D" body1="cubelet_zzz" body2="layer_D" active="false" solref="0.002 1"/>
+    <weld name="w_cubelet_zzz_L" body1="cubelet_zzz" body2="layer_L" active="false" solref="0.002 1"/>
     <weld name="w_cubelet_zzz_B" body1="cubelet_zzz" body2="layer_B" active="false" solref="0.002 1"/>
   </equality>
   <actuator>
