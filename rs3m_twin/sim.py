@@ -117,6 +117,8 @@ class FaceSim:
             if abs(a - n) < tol:
                 self.home[f] = float(n)
         out = ctrl.copy()
+        if self.params.mechanism == "contact":
+            return self._contact_membership(ctrl)
         for g, (_, drv, u0) in list(self.catch.items()):
             if drv is None:  # released: pieces guide the layer into its nearest detent
                 if self._settled(g, strict=True):
@@ -150,6 +152,22 @@ class FaceSim:
                         self._give(pc, f)
                 self.active = f  # keeps its pieces until it settles (hysteresis)
         return out
+
+    def _contact_membership(self, ctrl: np.ndarray) -> np.ndarray:
+        """``mechanism="contact"``: no catch torque and no stall. The motor always drives the pieces
+        the layer holds; those press on the blockers' pieces through the inner-part collision
+        shapes, which either cut the blocker home or jam. Once every blocker sits settled in a
+        detent its pieces in this layer are handed over."""
+        for i, f in enumerate(FACES):
+            if ctrl[i] == 0 or self.owns_layer(f):
+                continue
+            bl = self.blockers(f)
+            if all(self._settled(g) for g in bl):
+                for pc in self._layer[f]:
+                    if self.owner[pc] != f:
+                        self._give(pc, f)
+                self.active = f
+        return ctrl.copy()
 
     def _settled(self, face: str, strict: bool = False) -> bool:
         """At its detent (within ``align_tol``) and nearly still: safe to hand pieces over.

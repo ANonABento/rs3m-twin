@@ -31,6 +31,14 @@ class CubeParams:
     catch_k: float = 0.5  # piece-catch spring, N*m/rad (beats magnet_k within a degree)
     catch_damping: float = 3e-3  # piece-catch damper, N*m*s/rad
     catch_friction: float = 1e-3  # piece-catch dry friction, N*m
+    mechanism: str = "torque"  # "torque": scripted piece catch; "contact": inner-part collision shapes jam the layers
+    contact_friction: float = 0.03  # piece-on-piece sliding friction in "contact" mode (lubricated ABS)
+    contact_timeconst: float = 0.004  # contact solref time constant in "contact" mode, s (stiffer than default)
+    foot_radius: float = 3.0e-3  # corner foot, a sphere at the corner's inner vertex, m
+    tongue_radius: float = 2.0e-3  # edge tongue, a capsule along the edge's inner edge, m
+    tongue_half_len: float = 5.0e-3  # half length of the edge tongue, m
+    cap_radius: float = 7.0e-3  # centre cap groove floor, a disc on the centre's inner face, m
+    cap_height: float = 2.0e-3  # thickness of that disc, m
     align_tol_deg: float = 1.0  # a layer counts as aligned (may hand over pieces) within this, deg
     timestep: float = 0.001  # s; largest that keeps every test stable with implicitfast (1.5/2 ms miss the detent check)
     gap: float = 1e-4  # per-side clearance between cubelet collision shapes, m (30 um jams at a 2 ms step)
