@@ -4,6 +4,7 @@ import mujoco
 import numpy as np
 
 from .mjcf import FACE_AXES, FACES, build_mjcf, cubelet_positions, faces_of, piece_name
+from .magnets import DipoleDetent
 from .params import CubeParams
 
 QUARTER = np.pi / 2
@@ -37,9 +38,21 @@ class FaceSim:
         self.owner = {pc: faces_of(c)[0] for pc, c in self.cells.items()}
         self.home = dict.fromkeys(FACES, 0.0)
         self.active: str | None = None
+        self.catch: dict[str, tuple[float, str | None, float]] = {}  # face -> (target, driver, drive torque)
         self._piece_id = {pc: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, pc) for pc in self.cells}
         self._layer_id = {f: mujoco.mj_name2id(m, mujoco.mjtObj.mjOBJ_BODY, f"layer_{f}") for f in FACES}
+        self._hq = np.array([self.hinge_qpos[f] for f in FACES])
+        self._hd = np.array([self.hinge_dof[f] for f in FACES])
+        self.catch_dt = 5e-4  # max step while a piece catch is active, s
+        self._detent = DipoleDetent(self.params) if self.params.magnet_model == "dipole" else None
         mujoco.mj_forward(m, self.data)
+
+    def magnet(self, theta):
+        """Magnet torque (N*m) on a layer at ``theta`` (float or array): the dipole table, or the sin4 curve."""
+        if self._detent is not None:
+            return self._detent(theta)
+        out = magnet_torque(theta, self.params.magnet_k, self.params.magnet_peak_deg)
+        return out if np.ndim(theta) else float(out)
 
     def _eq(self, piece: str, face: str) -> int:
         return mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_EQUALITY, f"w_{piece}_{face}")
@@ -76,12 +89,21 @@ class FaceSim:
         x = np.degrees(self.offset(face))
         return -self.params.cut_rev_deg <= x <= self.params.cut_fwd_deg
 
+    @property
+    def cells(self) -> dict:
+        return self._cells
+
+    @cells.setter
+    def cells(self, value: dict) -> None:  # cache each layer's pieces; recomputed when pieces move
+        self._cells = value
+        self._layer = {f: [pc for pc, c in value.items() if f in faces_of(c)] for f in FACES}
+
     def owns_layer(self, face: str) -> bool:
-        return all(self.owner[pc] == face for pc, c in self.cells.items() if face in faces_of(c))
+        return all(self.owner[pc] == face for pc in self._layer[face])
 
     def blockers(self, face: str) -> set[str]:
         """Faces currently holding pieces of ``face``'s layer."""
-        return {self.owner[pc] for pc, c in self.cells.items() if face in faces_of(c)} - {face}
+        return {self.owner[pc] for pc in self._layer[face]} - {face}
 
     def _membership(self, ctrl: np.ndarray) -> np.ndarray:
         """Hysteretic membership: a layer keeps its pieces until another one asks for them
@@ -89,11 +111,20 @@ class FaceSim:
         turn stalls) unless every blocking face is within its cut angle; if so, the request
         pushes the blocker home. Returns the motor torques actually applied."""
         tol = np.radians(self.params.align_tol_deg)
-        for f in FACES:
-            nearest = np.round(self.angle(f) / QUARTER) * QUARTER
-            if abs(self.angle(f) - nearest) < tol:
-                self.home[f] = nearest
+        ang = self.data.qpos[self._hq]
+        nearest = np.round(ang / QUARTER) * QUARTER
+        for f, a, n in zip(FACES, ang, nearest):
+            if abs(a - n) < tol:
+                self.home[f] = float(n)
         out = ctrl.copy()
+        if self.params.mechanism == "contact":
+            return self._contact_membership(ctrl)
+        for g, (_, drv, u0) in list(self.catch.items()):
+            if drv is None:  # released: pieces guide the layer into its nearest detent
+                if self._settled(g, strict=True):
+                    del self.catch[g]
+            elif abs(ctrl[FACES.index(drv)]) < 0.1 * u0:  # drive let go: release the catch
+                self.catch[g] = (np.round(self.angle(g) / QUARTER) * QUARTER, None, 0.0)
         for i, f in enumerate(FACES):
             if ctrl[i] == 0 or self.owns_layer(f):
                 continue
@@ -101,26 +132,48 @@ class FaceSim:
             if not self._settled(f):
                 continue
             bl = self.blockers(f)
-            if not all(self.within_cut(g) for g in bl) or self.active in bl and not self._settled(self.active):
+            if self.active in bl and not self._settled(self.active):
+                continue
+            if not all(self.within_cut(g) for g in bl):
+                for g in bl:  # past the cut limit: pieces jam, hold the blocker where it is
+                    if g not in self.catch:
+                        self.catch[g] = (self.angle(g), f, abs(ctrl[i]))
                 continue
             ready = True
             for g in bl:
-                if not self._settled(g):  # cut: our push drives the blocker home (PD, capped)
+                if not self._settled(g):  # cut: the pieces push the blocker home
                     ready = False
-                    j, u = FACES.index(g), abs(ctrl[i])
-                    v_want = -30.0 * self.offset(g)  # approach home without overshoot
-                    push = 2.0 * u * (v_want - self.data.qvel[self.hinge_dof[g]])
-                    out[j] = np.clip(push, -u, u)
+                    self.catch[g] = (self.home[g], f, abs(ctrl[i]))
             if ready:
+                for g in bl:
+                    self.catch.pop(g, None)
                 for pc, c in self.cells.items():
                     if f in faces_of(c) and self.owner[pc] != f:
                         self._give(pc, f)
                 self.active = f  # keeps its pieces until it settles (hysteresis)
         return out
 
-    def _settled(self, face: str) -> bool:
-        """At its detent (within ``align_tol``) and nearly still: safe to hand pieces over."""
-        tol = np.radians(self.params.align_tol_deg)
+    def _contact_membership(self, ctrl: np.ndarray) -> np.ndarray:
+        """``mechanism="contact"``: no catch torque and no stall. The motor always drives the pieces
+        the layer holds; those press on the blockers' pieces through the inner-part collision
+        shapes, which either cut the blocker home or jam. Once every blocker sits settled in a
+        detent its pieces in this layer are handed over."""
+        for i, f in enumerate(FACES):
+            if ctrl[i] == 0 or self.owns_layer(f):
+                continue
+            bl = self.blockers(f)
+            if all(self._settled(g) for g in bl):
+                for pc in self._layer[f]:
+                    if self.owner[pc] != f:
+                        self._give(pc, f)
+                self.active = f
+        return ctrl.copy()
+
+    def _settled(self, face: str, strict: bool = False) -> bool:
+        """At its detent (within ``align_tol``) and nearly still: safe to hand pieces over.
+        ``strict`` (dropping a released catch) asks for a quarter of that, so the lightly damped
+        magnet detent does not ring the layer back out past ``align_tol``."""
+        tol = np.radians(self.params.align_tol_deg) / (4 if strict else 1)
         return abs(self.offset(face)) < tol and abs(self.data.qvel[self.hinge_dof[face]]) < 20 * tol
 
     def weld_error(self) -> float:
@@ -158,7 +211,9 @@ class FaceSim:
                 self.data.qpos[a : a + 3] = rot @ (np.array(c) * self.params.pitch)
                 self.data.qpos[a + 3 : a + 7] = quat
         self.data.qvel[:] = 0
-        self.home[face] = np.round(theta / QUARTER) * QUARTER
+        nearest = np.round(theta / QUARTER) * QUARTER
+        if abs(theta - nearest) < np.radians(self.params.align_tol_deg):  # else keep the detent it left
+            self.home[face] = nearest
         mujoco.mj_forward(self.model, self.data)
 
     def step(self, face_torques=None, n: int = 1) -> None:
@@ -167,9 +222,27 @@ class FaceSim:
             self.cmd = np.asarray(face_torques, float).copy()
         cmd = getattr(self, "cmd", np.zeros(6))
         p = self.params
+        d, cap = self.data, 3.0 * p.magnet_k  # pieces jam harder than the magnet pulls, but not instantly
         for _ in range(n):
-            self.data.ctrl[:] = self._membership(cmd)
-            self.data.qfrc_applied[:] = 0
-            for f in FACES:
-                self.data.qfrc_applied[self.hinge_dof[f]] = magnet_torque(self.angle(f), p.magnet_k, p.magnet_peak_deg)
-            mujoco.mj_step(self.model, self.data)
+            d.ctrl[:] = self._membership(cmd)
+            d.qfrc_applied[:] = 0
+            d.qfrc_applied[self._hd] = self.magnet(d.qpos[self._hq])
+            if not self.catch:
+                mujoco.mj_step(self.model, d)
+                continue
+            # piece catch: a stiff explicit spring-damper with friction, only stable at small steps, so
+            # while a catch is active the step is split into substeps of at most ``catch_dt``
+            idx = np.array([FACES.index(g) for g in self.catch])
+            target = np.array([t for t, _, _ in self.catch.values()])
+            dof, qa = self._hd[idx], self._hq[idx]
+            dt = self.model.opt.timestep
+            k = int(np.ceil(dt / self.catch_dt - 1e-9))
+            self.model.opt.timestep = dt / k
+            for _ in range(k):
+                d.qfrc_applied[self._hd] = self.magnet(d.qpos[self._hq])
+                v = d.qvel[dof]
+                tau = p.catch_k * (target - d.qpos[qa]) - p.catch_damping * v - p.catch_friction * np.tanh(v / 0.05)
+                d.qfrc_applied[dof] += np.clip(tau, -cap, cap)
+                mujoco.mj_step(self.model, d)
+            self.model.opt.timestep = dt
+

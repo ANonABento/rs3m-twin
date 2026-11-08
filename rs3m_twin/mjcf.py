@@ -3,6 +3,8 @@
 import itertools
 from pathlib import Path
 
+import functools
+
 import numpy as np
 
 from .params import CubeParams
@@ -75,6 +77,34 @@ def visual_geoms(name: str, c, p: CubeParams) -> list[str]:
     return out
 
 
+MECHANISMS = ("torque", "contact")
+
+
+def _vec(v) -> str:
+    return " ".join(f"{x:.6g}" for x in v)
+
+
+def inner_geoms(name: str, c, p: CubeParams) -> list[str]:
+    """Collision shapes for a piece's inner parts ("contact" mechanism), body frame, each kept inside
+    the piece's own cell so aligned turns never touch: the corner foot (sphere at the inner vertex),
+    the edge tongue (capsule along the inner edge) and the centre cap's groove floor (disc on the
+    inner face, the track the tongues ride in)."""
+    c = np.array(c, float)
+    nz = int(np.abs(c).sum())
+    inset = lambda r: c * (-p.pitch / 2 + r + p.gap)  # noqa: E731
+    if nz == 3:
+        return [f'        <geom name="{name}_foot" type="sphere" size="{p.foot_radius:.6g}" pos="{_vec(inset(p.foot_radius))}" class="piece"/>']
+    if nz == 2:
+        a = int(np.flatnonzero(c == 0)[0])
+        e1, e2 = inset(p.tongue_radius), inset(p.tongue_radius)
+        e1[a], e2[a] = -p.tongue_half_len, p.tongue_half_len
+        return [f'        <geom name="{name}_tongue" type="capsule" size="{p.tongue_radius:.6g}" fromto="{_vec(e1)} {_vec(e2)}" class="piece"/>']
+    return [
+        f'        <geom name="{name}_cap" type="cylinder" size="{p.cap_radius:.6g} {p.cap_height / 2:.6g}"'
+        f' pos="{_vec(inset(p.cap_height / 2))}" zaxis="{_vec(np.abs(c))}" class="piece"/>'
+    ]
+
+
 def cubelet_positions():
     """Integer grid coords of the 26 visible cubelets, centres first."""
     cells = [c for c in itertools.product((-1, 0, 1), repeat=3) if any(c)]
@@ -91,9 +121,20 @@ def piece_name(kind: str, c) -> str:
     return f"{kind}_{''.join('npz'[v + 1] for v in c)}"
 
 
-def faces_of(c) -> list[str]:
+def faces_of(c) -> tuple[str, ...]:
     """Faces (in FACES order) whose layer contains grid cell ``c``."""
-    return [f for f in FACES if np.dot(FACE_AXES[f], c) == 1]
+    return _faces_of(tuple(int(v) for v in c))
+
+
+@functools.lru_cache(maxsize=None)
+def _faces_of(c) -> tuple[str, ...]:
+    return tuple(f for f in FACES if np.dot(FACE_AXES[f], c) == 1)
+
+
+def never_touching(centres) -> list[tuple[tuple, tuple]]:
+    """Centre pairs that can never collide: centres only spin in place, and opposite ones sit
+    2 pitches apart, beyond the sum of their bounding radii (sqrt(3)/2 pitch each)."""
+    return [(a, b) for i, a in enumerate(centres) for b in centres[i + 1 :] if np.dot(a, b) == -1]
 
 
 def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAULT_PATH) -> str:
@@ -101,6 +142,9 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
     p = params or CubeParams()
     if p.visual_style not in VISUAL_STYLES:
         raise ValueError(f"visual_style must be one of {VISUAL_STYLES}, got {p.visual_style!r}")
+    if p.mechanism not in MECHANISMS:
+        raise ValueError(f"mechanism must be one of {MECHANISMS}, got {p.mechanism!r}")
+    contact = p.mechanism == "contact"
     stickerless = p.visual_style == "stickerless"
     pitch, h = p.pitch, p.pitch / 2
     centres, others = cubelet_positions()
@@ -116,6 +160,7 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
             name = piece_name(kind, c)  # n=-1, z=0, p=+1
             pos = " ".join(f"{v * pitch:.6g}" for v in c)
             vis = "".join(g + "\n" for g in visual_geoms(name, c, p)) if stickerless else ""
+            vis = "".join(g + "\n" for g in inner_geoms(name, c, p)) + vis if contact else vis
             bodies.append(
                 f'      <body name="{name}" pos="{pos}">\n'
                 f'        <freejoint name="{name}"/>\n'
@@ -148,15 +193,19 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
         if stickerless
         else ""
     )
+    excludes = "\n".join(
+        f'    <exclude body1="{piece_name("centre", a)}" body2="{piece_name("centre", b)}"/>' for a, b in never_touching(centres)
+    )
+    solref = f' solref="{p.contact_timeconst:.6g} 1"' if contact else ""
     xml = f"""<mujoco model="rs3m">
   <compiler angle="radian" autolimits="true"/>
-  <option timestep="0.0005" integrator="implicitfast" gravity="0 0 0"/>  <!-- core is held; gravity only loads the welds -->
+  <option timestep="{p.timestep:.6g}" integrator="implicitfast" gravity="0 0 0"/>  <!-- core is held; gravity only loads the welds -->
   <asset>
     <mesh name="cubelet" vertex="{_chamfer_box_verts(h - p.gap, p.chamfer)}"/>
 {vis_assets}  </asset>
   <default>
     <default class="piece">
-      <geom friction="{p.friction:.6g}" margin="0" rgba="0.1 0.1 0.1 1" group="{col_group}"/>
+      <geom friction="{p.contact_friction if contact else p.friction:.6g}" margin="0" rgba="0.1 0.1 0.1 1" group="{col_group}"{solref}/>
     </default>
     <default class="visual">
       <geom contype="0" conaffinity="0" group="{VIS_GROUP}" mass="0"/>
@@ -170,6 +219,9 @@ def build_mjcf(params: CubeParams | None = None, path: str | Path | None = DEFAU
     </body>
 {chr(10).join(bodies)}
   </worldbody>
+  <contact>
+{excludes}
+  </contact>
   <equality>
 {chr(10).join(welds)}
   </equality>
