@@ -7,8 +7,8 @@ import numpy as np
 
 @dataclass
 class CubeParams:
-    edge: float = 0.0555  # full cube edge, m
-    mass: float = 0.077  # total mass, kg (MagLev)
+    edge: float = 0.056  # full cube edge, m (Super RS3 M, 56 mm)
+    mass: float = 0.078  # total mass, kg (Super RS3 M Standard)
     core_mass_frac: float = 0.10  # share of mass in the core
     centre_mass_frac: float = 0.20  # share of mass in the 6 centres
     chamfer: float = 0.0012  # bevel on cubelet collision shapes, m
@@ -18,8 +18,8 @@ class CubeParams:
     frictionloss: float = 2e-4  # hinge dry friction, N*m
     magnet_k: float = 3e-3  # peak detent torque, N*m
     magnet_peak_deg: float = 15.0
-    cut_fwd_deg: float = 45.0
-    cut_rev_deg: float = 20.0
+    cut_fwd_deg: float = 50.0
+    cut_rev_deg: float = 35.0
     align_tol_deg: float = 1.0  # a layer counts as aligned (may hand over pieces) within this, deg
     gap: float = 3e-5  # per-side clearance between cubelet collision shapes, m
     visual_style: str = "stickerless"  # "stickerless": coloured visual meshes; "debug": bare collision shapes
