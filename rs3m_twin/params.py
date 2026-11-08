@@ -20,6 +20,9 @@ class CubeParams:
     magnet_peak_deg: float = 15.0
     cut_fwd_deg: float = 50.0
     cut_rev_deg: float = 35.0
+    catch_k: float = 0.5  # piece-catch spring, N*m/rad (beats magnet_k within a degree)
+    catch_damping: float = 3e-3  # piece-catch damper, N*m*s/rad
+    catch_friction: float = 1e-3  # piece-catch dry friction, N*m
     align_tol_deg: float = 1.0  # a layer counts as aligned (may hand over pieces) within this, deg
     gap: float = 3e-5  # per-side clearance between cubelet collision shapes, m
     visual_style: str = "stickerless"  # "stickerless": coloured visual meshes; "debug": bare collision shapes
@@ -31,10 +34,11 @@ class CubeParams:
         return self.edge / 3.0
 
     def randomize(self, rng: np.random.Generator | int | None = None, scale: float = 0.2) -> "CubeParams":
-        """Return a copy with friction, damping, magnet strength and mass each scaled by an
+        """Return a copy with friction, damping, magnet strength, mass and the catch
+        spring/damper/friction each scaled by an
         independent factor drawn uniformly from [1 - scale, 1 + scale] (domain randomisation)."""
         rng = np.random.default_rng(rng)
-        f = rng.uniform(1.0 - scale, 1.0 + scale, size=5)
+        f = rng.uniform(1.0 - scale, 1.0 + scale, size=8)
         return replace(
             self,
             friction=self.friction * f[0],
@@ -42,4 +46,7 @@ class CubeParams:
             frictionloss=self.frictionloss * f[2],
             magnet_k=self.magnet_k * f[3],
             mass=self.mass * f[4],
+            catch_k=self.catch_k * f[5],
+            catch_damping=self.catch_damping * f[6],
+            catch_friction=self.catch_friction * f[7],
         )
