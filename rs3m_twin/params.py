@@ -7,8 +7,8 @@ import numpy as np
 
 @dataclass
 class CubeParams:
-    edge: float = 0.0555  # full cube edge, m
-    mass: float = 0.077  # total mass, kg (MagLev)
+    edge: float = 0.056  # full cube edge, m (Standard)
+    mass: float = 0.078  # total mass, kg (Standard)
     core_mass_frac: float = 0.10  # share of mass in the core
     centre_mass_frac: float = 0.20  # share of mass in the 6 centres
     chamfer: float = 0.0012  # bevel on cubelet collision shapes, m

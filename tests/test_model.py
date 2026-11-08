@@ -42,3 +42,14 @@ def test_default_writes_models_dir():
     build_mjcf()
     assert DEFAULT_PATH.exists()
     mujoco.MjModel.from_xml_path(str(DEFAULT_PATH))
+
+
+def test_committed_model_matches_standard():
+    from rs3m_twin.mjcf import DEFAULT_PATH
+
+    model = mujoco.MjModel.from_xml_path(str(DEFAULT_PATH))
+    data = mujoco.MjData(model)
+    mujoco.mj_forward(model, data)
+    assert abs(mujoco.mj_getTotalmass(model) - 0.078) <= 0.001
+    lo, hi = bounding_box(model, data)
+    assert np.all(np.abs((hi - lo) - 0.056) <= 0.0002)

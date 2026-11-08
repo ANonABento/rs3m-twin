@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from rs3m_twin import FaceSim, magnet_torque
+from rs3m_twin import CubeParams, FaceSim, magnet_torque
 
 MM = 1e-3
 
@@ -20,9 +20,13 @@ def _hold(sim, face, deg):
     return -magnet_torque(np.radians(deg), sim.params.magnet_k, sim.params.magnet_peak_deg)
 
 
-@pytest.mark.parametrize("off, turns", [(40, True), (50, False)])
+CUT = CubeParams().cut_fwd_deg
+
+
+@pytest.mark.parametrize("off, turns", [(CUT - 5, True), (CUT + 5, False)])
 def test_cut_angle(off, turns):
     sim = FaceSim()
+    assert sim.params.cut_fwd_deg == CUT
     sim.set_angle("U", np.radians(off))
     tq = np.zeros(6)
     tq[0] = _hold(sim, "U", off)  # U is held off-grid
